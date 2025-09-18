@@ -8,6 +8,9 @@ const app = express();
 // definisco il numero della porto sulla quale far girare l'applicazione
 const port = process.env.PORT;
 
+// importo il middleware
+app.use(express.static("public"));
+
 // definisco la rotta base
 app.get("/", (req, res) => {
   res.send("Rotta base del mio blog");
@@ -17,4 +20,3 @@ app.get("/", (req, res) => {
 app.listen(port, () => {
   console.log(`Server in ascolto sulla porta ${port}`);
 });
-
