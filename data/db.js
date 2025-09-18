@@ -7,7 +7,7 @@ const connection = mysql.createConnection({
   user: "root",
   password: "Mementoauderesemper4!",
   database: "db_movies",
-  port: "3307",
+  port: "3306",
 });
 
 // stabilisco la connessione al db

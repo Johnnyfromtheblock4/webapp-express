@@ -1,5 +1,6 @@
 // importo express
 const express = require("express");
+const connection = require("./data/db");
 
 // creo l'istanza dell'appa attraverso il mertodo express che ho importato
 const app = express();
