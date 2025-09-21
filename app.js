@@ -1,14 +1,14 @@
 // importo express
 const express = require("express");
 
-// importo errorsHandler
-const errorsHandler = require("./middlewares/errorsHandler");
-
 // importo il middleware imagePathMiddleware
 const imagePathMiddleware = require("./middlewares/imagePathMiddleware");
 
 // importo il middleware notFound
 const notFound = require("./middlewares/notFound");
+
+// importo errorsHandler
+const errorsHandler = require("./middlewares/errorsHandler");
 
 // creo l'istanza dell'appa attraverso il mertodo express che ho importato
 const app = express();
