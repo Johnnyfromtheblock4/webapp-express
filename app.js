@@ -1,6 +1,9 @@
 // importo express
 const express = require("express");
 
+// importo il pacchetto cors
+const cors = require("cors");
+
 // importo il middleware imagePathMiddleware
 const imagePathMiddleware = require("./middlewares/imagePathMiddleware");
 
@@ -18,6 +21,9 @@ const port = process.env.PORT;
 
 // importo il ruoter
 const movieRouter = require("./routers/movieRouter");
+
+// registro il middleware per il cors
+app.use(cors({ origin: process.env.FE_APP }));
 
 // importo il middleware
 app.use(express.static("public"));
