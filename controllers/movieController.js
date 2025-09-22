@@ -12,8 +12,8 @@ const index = (req, res) => {
       return res
         .status(500)
         .json({ error: `Errore nell'esecuzione della query: ${err}` });
-    const movies = results.map((book) => {
-      // const image = req.imagePath + book.image;
+    const movies = results.map((movie) => {
+      // const image = req.imagePath + movie.image;
       // const { id, title, director, genre, abstract } = movies;
       // const obj = {
       //   id,
@@ -26,8 +26,8 @@ const index = (req, res) => {
       // };
       // return obj;
       return {
-        ...movies,
-        image: req.imagePath + movies.image,
+        ...movie,
+        image: req.imagePath + movie.image,
       };
     });
     res.send(movies);
@@ -40,15 +40,15 @@ const show = (req, res) => {
   const { id } = req.params;
 
   // creo la query
-  const sqlBook = "SELECT * FROM movies WHERE id = ?";
+  const sqlMovie = "SELECT * FROM movies WHERE id = ?";
 
   // eseguo la query passando ora i parametri
-  connection.query(sqlBook, [id], (err, resultBook) => {
+  connection.query(sqlMovie, [id], (err, resultMovie) => {
     if (err)
       return res.status(500).json({
         error: `errore nell'esecuzione della query: ${err}`,
       });
-    res.send(resultBook[0]);
+    res.send(resultMovie[0]);
   });
 };
 
