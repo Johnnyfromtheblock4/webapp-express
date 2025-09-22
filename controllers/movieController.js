@@ -12,7 +12,25 @@ const index = (req, res) => {
       return res
         .status(500)
         .json({ error: `Errore nell'esecuzione della query: ${err}` });
-    res.send(results);
+    const movies = results.map((book) => {
+      // const image = req.imagePath + book.image;
+      // const { id, title, director, genre, abstract } = movies;
+      // const obj = {
+      //   id,
+      //   title,
+      //   director,
+      //   genre,
+      //   release_year,
+      //   abstract,
+      //   image,
+      // };
+      // return obj;
+      return {
+        ...movies,
+        image: req.imagePath + movies.image,
+      };
+    });
+    res.send(movies);
   });
 };
 
