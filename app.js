@@ -28,6 +28,9 @@ app.use(cors({ origin: process.env.FE_APP }));
 // importo il middleware
 app.use(express.static("public"));
 
+// definisco l'imagePath
+app.use(imagePathMiddleware);
+
 // definisco la rotta base
 app.get("/", (req, res) => {
   res.send("Rotta base del mio blog");
