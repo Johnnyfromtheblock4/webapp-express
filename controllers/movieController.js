@@ -48,7 +48,12 @@ const show = (req, res) => {
       return res.status(500).json({
         error: `errore nell'esecuzione della query: ${err}`,
       });
-    res.send(resultMovie[0]);
+
+      const movie = {
+      ...resultMovie[0],
+      image: req.imagePath + resultMovie[0].image,
+    };
+    res.send(movie);
   });
 };
 
