@@ -13,18 +13,6 @@ const index = (req, res) => {
         .status(500)
         .json({ error: `Errore nell'esecuzione della query: ${err}` });
     const movies = results.map((movie) => {
-      // const image = req.imagePath + movie.image;
-      // const { id, title, director, genre, abstract } = movies;
-      // const obj = {
-      //   id,
-      //   title,
-      //   director,
-      //   genre,
-      //   release_year,
-      //   abstract,
-      //   image,
-      // };
-      // return obj;
       return {
         ...movie,
         image: req.imagePath + movie.image,
@@ -39,21 +27,46 @@ const show = (req, res) => {
   // recupero l'id parametro
   const { id } = req.params;
 
-  // creo la query
+  // creo la query per il movie
   const sqlMovie = "SELECT * FROM movies WHERE id = ?";
 
-  // eseguo la query passando ora i parametri
+  // eseguo la query del movie
   connection.query(sqlMovie, [id], (err, resultMovie) => {
-    if (err)
+    if (err) {
       return res.status(500).json({
-        error: `errore nell'esecuzione della query: ${err}`,
+        error: `Errore nell'esecuzione della query: ${err}`,
       });
+    }
 
-      const movie = {
+    if (resultMovie.length === 0) {
+      return res.status(404).json({ error: "Film non trovato" });
+    }
+
+    // creo l'oggetto movie con immagine
+    const movie = {
       ...resultMovie[0],
       image: req.imagePath + resultMovie[0].image,
     };
-    res.send(movie);
+
+    // creo la query per le reviews 
+    const sqlReviews = "SELECT * FROM reviews WHERE movie_id = ?"; 
+
+    // eseguo la query delle reviews 
+    connection.query(sqlReviews, [id], (err, resultReviews) => {
+      if (err) {
+        return res.status(500).json({
+          error: `Errore nell'esecuzione della query reviews: ${err}`,
+        });
+      }
+
+      const movieWithReviews = {
+        ...movie,
+        reviews: resultReviews || [],
+      };
+
+      // invio la risposta completa una sola volta
+      res.send(movieWithReviews);
+    });
   });
 };
 
