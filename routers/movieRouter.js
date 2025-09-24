@@ -18,6 +18,6 @@ router.get("/", movieController.index);
 router.get("/:id", movieController.show);
 
 // store
-router.post("/", upload.single("image"), movieController.store);
+router.post("/:id/reviews", movieController.storeReviews);
 
 module.exports = router;

@@ -71,42 +71,30 @@ const show = (req, res) => {
 };
 
 // store
-const store = (req, res) => {
-  const { title, director, abstract } = req.body;
+const storeReviews = (req, res) => {
+  const { name, vote, text } = req.body;
 
-  const fileName = req.file ? req.file.filename : null;
-
-  if (!title || !director || !abstract || !fileName) {
-    return res.status(400).json({
-      result: false,
-      message: "Dati mancanti per la creazione del film",
-    });
-  }
+  const { id } = req.params;
 
   const query =
-    "INSERT INTO movies (title, director, image, abstract) VALUES (?, ?, ?, ?)";
+    "INSERT INTO reviews (name, vote, text, movie_id) VALUES (?, ?, ?, ?)";
 
-  connection.query(
-    query,
-    [title, director, fileName, abstract],
-    (err, result) => {
-      if (err) {
-        return res.status(500).json({
-          result: false,
-          message: "Errore durante l'inserimento " + err,
-        });
-      }
-      res.status(201).json({
-        result: true,
-        message: "Film creato con successo",
-        movieId: result.insertId,
+  connection.query(query, [name, vote, text, id], (err, result) => {
+    if (err) {
+      return res.status(500).json({
+        result: false,
+        message: "Errore durante l'inserimento " + err,
       });
     }
-  );
+    res.status(201).json({
+      result: true,
+      message: "Recensione creata con successo",
+    });
+  });
 };
 
 module.exports = {
   index,
   show,
-  store,
+  storeReviews,
 };

@@ -1,41 +1,53 @@
 // importo express
 const express = require("express");
+
+// importo il pacchetto cors
 const cors = require("cors");
 
-// importo middlewares
+// importo il middleware imagePathMiddleware
 const imagePathMiddleware = require("./middlewares/imagePathMiddleware");
+
+// importo il middleware notFound
 const notFound = require("./middlewares/notFound");
+
+// importo errorsHandler
 const errorsHandler = require("./middlewares/errorsHandler");
 
-// creo app
+// creo l'istanza dell'appa attraverso il mertodo express che ho importato
 const app = express();
 
-// porto con fallback
-const port = process.env.PORT || 3000;
+// definisco il numero della porto sulla quale far girare l'applicazione
+const port = process.env.PORT;
 
-// importo router
+// importo il ruoter
 const movieRouter = require("./routers/movieRouter");
 
-// middlewares globali
-app.use(cors({ origin: process.env.FE_APP || "*" }));
-app.use(express.json()); // parse JSON
-app.use(express.urlencoded({ extended: true })); // parse form senza file
-app.use(express.static("public")); // cartella pubblica
+// registro il middleware per il cors
+app.use(cors({ origin: process.env.FE_APP }));
+
+// importo il middleware
+app.use(express.static("public"));
+
+// definisco l'imagePath
 app.use(imagePathMiddleware);
 
-// rotta base
+app.use(express.json());
+
+// definisco la rotta base
 app.get("/", (req, res) => {
   res.send("Rotta base del mio blog");
 });
 
-// rotte API
+// definisco le rotte per i film
 app.use("/api/movies", movieRouter);
 
-// error handlers
+// definisco il middleware notFound
 app.use(notFound);
+
+// definisco il middleware errorsHandler
 app.use(errorsHandler);
 
-// avvio server
+// dico al server di rimanere in ascolto sulla porta 3000
 app.listen(port, () => {
   console.log(`Server in ascolto sulla porta ${port}`);
 });
