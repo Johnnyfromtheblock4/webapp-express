@@ -48,10 +48,10 @@ const show = (req, res) => {
       image: req.imagePath + resultMovie[0].image,
     };
 
-    // creo la query per le reviews 
-    const sqlReviews = "SELECT * FROM reviews WHERE movie_id = ?"; 
+    // creo la query per le reviews
+    const sqlReviews = "SELECT * FROM reviews WHERE movie_id = ?";
 
-    // eseguo la query delle reviews 
+    // eseguo la query delle reviews
     connection.query(sqlReviews, [id], (err, resultReviews) => {
       if (err) {
         return res.status(500).json({
@@ -70,7 +70,37 @@ const show = (req, res) => {
   });
 };
 
+// store
+const store = (req, res) => {
+  // recuperiamo i dati della form
+  const { title, director, genre, release_year, abstract } = req.body;
+
+  const fileName = `${req.file.fileName}`;
+
+  // query di inserimento
+  const query =
+    "INSERT INTO movies (title, director, genre, release_year, image,  abstract) VALUES (?, ?, ?, ?, ?, ?)";
+
+  // eseguo la query
+  connection.query(
+    query,
+    [title, director, genre, release_year, fileName, abstract],
+    (err, result) => {
+      if (err) {
+        return res
+          .status(500)
+          .json({ error: "Errore durante l'inserimento " + err });
+      }
+      res.status(201).json({
+        result: true,
+        message: "Film creato con successo",
+      });
+    }
+  );
+};
+
 module.exports = {
   index,
   show,
+  store,
 };
