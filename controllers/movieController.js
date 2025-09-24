@@ -72,28 +72,34 @@ const show = (req, res) => {
 
 // store
 const store = (req, res) => {
-  // recuperiamo i dati della form
-  const { title, director, genre, release_year, abstract } = req.body;
+  const { title, director, abstract } = req.body;
 
-  const fileName = `${req.file.fileName}`;
+  const fileName = req.file ? req.file.filename : null;
 
-  // query di inserimento
+  if (!title || !director || !abstract || !fileName) {
+    return res.status(400).json({
+      result: false,
+      message: "Dati mancanti per la creazione del film",
+    });
+  }
+
   const query =
-    "INSERT INTO movies (title, director, genre, release_year, image,  abstract) VALUES (?, ?, ?, ?, ?, ?)";
+    "INSERT INTO movies (title, director, image, abstract) VALUES (?, ?, ?, ?)";
 
-  // eseguo la query
   connection.query(
     query,
-    [title, director, genre, release_year, fileName, abstract],
+    [title, director, fileName, abstract],
     (err, result) => {
       if (err) {
-        return res
-          .status(500)
-          .json({ error: "Errore durante l'inserimento " + err });
+        return res.status(500).json({
+          result: false,
+          message: "Errore durante l'inserimento " + err,
+        });
       }
       res.status(201).json({
         result: true,
         message: "Film creato con successo",
+        movieId: result.insertId,
       });
     }
   );
